@@ -33,7 +33,7 @@ class ArizeModel:
         # Step 2 Saving model metadata for passing in later
         self.model_id = "rayserve-model"
         self.model_version = "1.0"
-        self.model_type = ModelTypes.BINARY
+        self.model_type = ModelTypes.NUMERIC
 
     async def __call__(self, starlette_request):
         payload = await starlette_request.json()
@@ -43,7 +43,7 @@ class ArizeModel:
 
         # Step 3 Log production to Arize
         ids_df = pd.DataFrame([str(uuid.uuid4()) for _ in range(len(X_test))])
-        log_responses = self.arize.bulk_log(
+        log_responses = self.arize.log(
             model_id=self.model_id,
             prediction_ids=ids_df,
             model_version=self.model_version,

@@ -117,7 +117,7 @@ ids_df = pd.DataFrame([str(uuid.uuid4()) for _ in range(len(prediction_labels.in
 pred = arize.log(
     model_id='sample-model-1',
     model_version='v1.23.64',
-    model_type=ModelTypes.BINARY,
+    model_type=ModelTypes.NUMERIC,
     prediction_id='plED4eERDCasd9797ca34',
     prediction_label=True,
     features=features,
@@ -131,27 +131,7 @@ if res.status_code != 200:
   print(f'future failed with response code {res.status_code}, {res.text}')
 ```
 
-#### Bulk upload of predictions:
-
-```python
-responses = arize.bulk_log(
-    model_id='sample-model-1',
-    model_version='v1.23.64',
-    model_type=ModelTypes.BINARY,
-    prediction_ids=ids_df,
-    prediction_labels=prediction_labels_df,
-    features=features_df
-    )
-#### To confirm that the log request completed successfully, await for futures to resolve:
-## NB: This is a blocking call
-import concurrent.futures as cf
-for response in cf.as_completed(responses):
-  res = response.result()
-  if res.status_code != 200:
-    print(f'future failed with response code {res.status_code}, {res.text}')
-```
-
-The client's log_prediction/actual function returns a single concurrent future while log_bulk_predictions/actuals returns a list of concurrent futures for asynchronous behavior. To capture the logging response, you can await the resolved futures. If you desire a fire-and-forget pattern, you can disregard the responses altogether.
+The client's log_prediction/actual function returns a single concurrent future. To capture the logging response, you can await the resolved futures. If you desire a fire-and-forget pattern, you can disregard the responses altogether.
 
 We automatically discover new models logged over time based on the model ID sent on each prediction.
 
@@ -162,29 +142,10 @@ We automatically discover new models logged over time based on the model ID sent
 ```python
 response = arize.log(
     model_id='sample-model-1',
-    model_type=ModelTypes.BINARY,
+    model_type=ModelTypes.NUMERIC,
     prediction_id='plED4eERDCasd9797ca34',
     actual_label=False
     )
-```
-
-#### Bulk upload of actuals:
-
-```python
-responses = arize.bulk_log(
-    model_id='sample-model-1',
-    model_type=ModelTypes.BINARY,
-    prediction_ids=ids_df,
-    actual_labels=actual_labels_df,
-    )
-
-#### To confirm that the log request completed successfully, await for futures to resolve:
-## NB: This is a blocking call
-import concurrent.futures as cf
-for response in cf.as_completed(responses):
-  res = response.result()
-  if res.status_code != 200:
-    print(f'future failed with response code {res.status_code}, {res.text}')
 ```
 
 Once the actual labels (ground truth) for your predictions have been determined, you can send them to Arize and evaluate your metrics over time. The prediction id for one prediction links to its corresponding actual label so it's important to note those must be the same when matching events.

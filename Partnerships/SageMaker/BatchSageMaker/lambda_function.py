@@ -70,7 +70,7 @@ def lambda_handler(event, context):
                 tfuture = arize_client.log_bulk_predictions(
                     model_id=model_name,
                     model_version=model_version_id_now,
-                    model_type=ModelTypes.CATEGORICAL,
+                    model_type=ModelTypes.SCORE_CATEGORICAL,
                     features=features_df,
                     prediction_ids=ids,
                     prediction_labels=predictions_df,
