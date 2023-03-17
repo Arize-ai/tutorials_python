@@ -1,0 +1,25 @@
+name: "Create Copybara PR"
+
+on:
+  push:
+    branches:
+      - "copybara/sync"
+
+jobs:
+  open-pr:
+    name: "Create PR"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+        with:
+          ref: copybara/sync
+
+      - name: Get git commit data
+        uses: rlespinasse/git-commit-data-action@v1
+
+      - name: Open PR
+        run: |
+          gh pr create -B main -H copybara/sync --no-maintainer-edit -t "${{ env.GIT_COMMIT_MESSAGE_SUBJECT }}" -b "${{ env.GIT_COMMIT_MESSAGE_BODY }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
