@@ -35,11 +35,13 @@ def lambda_handler(event, context):
             print("Found ArizeMonitor")
             # print(json.dumps(str(event['detail'])))≈ß
             print(
-                "transform name " + json.dumps(str(event["detail"]["TransformJobName"]))
+                "transform name "
+                + json.dumps(str(event["detail"]["TransformJobName"]))
             )
             print("Found transform name")
             print(
-                "output path" + str(event["detail"]["TransformOutput"]["S3OutputPath"])
+                "output path"
+                + str(event["detail"]["TransformOutput"]["S3OutputPath"])
             )
             if "Environment" in event["detail"]:
                 # Helps debugging - prints the information passed in on the event
@@ -48,7 +50,9 @@ def lambda_handler(event, context):
                 output_path = event["detail"]["TransformOutput"]["S3OutputPath"]
                 batch_file_noID = event["detail"]["Environment"]["batch_file"]
                 features_file = event["detail"]["Environment"]["features_file"]
-                model_version_id_now = event["detail"]["Environment"]["model_version"]
+                model_version_id_now = event["detail"]["Environment"][
+                    "model_version"
+                ]
                 batch_id = event["detail"]["Environment"]["batch_id"]
                 model_name = event["detail"]["Environment"]["model_name"]
                 # Process & load data for sending to Arize
@@ -57,7 +61,9 @@ def lambda_handler(event, context):
                     output_path, "{}.out".format(batch_file_noID)
                 )
                 # Output file has both predictions and features
-                column_names = list(features["features"].values) + ["predictions"]
+                column_names = list(features["features"].values) + [
+                    "predictions"
+                ]
                 output_df = pd.read_csv(
                     io.StringIO(output), sep=",", names=column_names
                 )
@@ -66,7 +72,9 @@ def lambda_handler(event, context):
                 ## ARIZE CLIENT SETUP ##
                 arize_client = Client(space_key=space_key, api_key=api_key)
                 # Turn Predictions into strings - classification 1/0
-                ids = pd.DataFrame([str(x) + "_" + batch_id for x in features_df.index])
+                ids = pd.DataFrame(
+                    [str(x) + "_" + batch_id for x in features_df.index]
+                )
                 tfuture = arize_client.log_bulk_predictions(
                     model_id=model_name,
                     model_version=model_version_id_now,

@@ -19,6 +19,7 @@ X, y = pd.DataFrame(X, columns=data["feature_names"]), pd.Series(y)
 X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=42)
 model = RandomForestClassifier().fit(X_train, y_train)
 
+
 # Integration starts here
 @serve.deployment(name="ArizeModel")
 class ArizeModel:

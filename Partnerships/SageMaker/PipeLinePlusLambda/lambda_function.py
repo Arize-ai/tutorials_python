@@ -24,7 +24,9 @@ def lambda_handler(event, context):
         # Get the body from the event
         data_send = event["body"]
         s3 = boto3.resource("s3")
-        content_object = s3.Object(default_bucket, s3_schema_key_prefix + "/schema.txt")
+        content_object = s3.Object(
+            default_bucket, s3_schema_key_prefix + "/schema.txt"
+        )
         if verbose:
             print("content_object")
         if not content_object:
