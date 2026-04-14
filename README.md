@@ -1,3 +1,13 @@
+## 📦 This repository has been archived
+
+  This repo is no longer actively maintained. Our tutorials, for all languages, are located [Arize-ai/tutorials](https://github.com/Arize-ai/tutorials) — that's where all the action is happening now.
+
+  If you've been using this repo, we'd encourage you to head over there. You'll find the latest updates, bug fixes, and improvements in the new home.
+
+  Thanks for being part of Arize! 🙏
+
+---
+
 <div align="center">
   <img src="https://storage.googleapis.com/arize-assets/arize-logo-white.jpg" width="600" /><br><br>
 </div>
@@ -7,6 +17,7 @@
 
 ---
 
+  
 ## Overview
 
 A helper library to interact with Arize AI APIs.
